@@ -77,7 +77,7 @@ impl<F: PrimeField + PrimeFieldBits> StepCircuit<F> for SigIter<F> {
             &self.pubkey
         )?;
 
-        let h_al: Vec<Boolean> = self.h.clone().into_iter().map(|i| Boolean::constant(i != false)).collect();
+        let h_al: Vec<Boolean> = self.h.clone().into_iter().map(Boolean::constant).collect();
         assert_eq!(h_al.len(), 253);
 
         let r_al = AllocatedAffinePoint::alloc_affine_point(
@@ -85,7 +85,7 @@ impl<F: PrimeField + PrimeFieldBits> StepCircuit<F> for SigIter<F> {
             &self.sign.0
         )?;
 
-        let s_al: Vec<Boolean> = self.sign.1.clone().into_iter().map(|i| Boolean::constant(i != false)).collect();
+        let s_al: Vec<Boolean> = self.sign.1.clone().into_iter().map(Boolean::constant).collect();
         assert_eq!(s_al.len(), 253);
 
         verify_circuit(

@@ -28,10 +28,10 @@ pub fn verify(h: &BigUint, pub_key: &AffinePoint, r: &AffinePoint, s: &BigUint) 
 {   
     let g = Ed25519Curve::basepoint();
 
-    let p1 = Ed25519Curve::scalar_multiplication(&g, &s);
+    let p1 = Ed25519Curve::scalar_multiplication(&g, s);
 
-    let h_pubkey = Ed25519Curve::scalar_multiplication(&pub_key, &h);
-    let p2 = Ed25519Curve::add_points(&h_pubkey, &r);
+    let h_pubkey = Ed25519Curve::scalar_multiplication(pub_key, h);
+    let p2 = Ed25519Curve::add_points(&h_pubkey, r);
 
     Ed25519Curve::check_equality(&p1, &p2)
 }
