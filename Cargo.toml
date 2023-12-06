@@ -12,3 +12,6 @@ bellpepper-ed25519 = { git = "https://github.com/varunthakore/bellpepper-gadgets
 ff = "0.13.0"
 num-bigint = "0.4.4"
 rand = "0.8"
+
+[dev-dependencies]
+pasta_curves = "0.5.1"
