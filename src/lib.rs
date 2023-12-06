@@ -1,2 +1,2 @@
-pub mod ed25519;
 pub mod circuit;
+pub mod ed25519;
