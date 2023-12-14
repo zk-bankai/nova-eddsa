@@ -43,7 +43,7 @@ cargo build --release --examples
 To generate benchmarks for specific number of signatures run:
 ```bash
 cargo build --release --examples
-./mprove-nova/genlog.sh [num_of_signatures]
+./genlog.sh [num_of_signatures]
 ```
 
 The benchmarks will be generated in the [`logs`](/logs/) directory. It contains the files `output_N.txt` where `N` is the number of signatures.
