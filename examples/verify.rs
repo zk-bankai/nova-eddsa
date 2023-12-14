@@ -1,17 +1,23 @@
-type G1 = pasta_curves::pallas::Point;
-type G2 = pasta_curves::vesta::Point;
+use nova_snark::{provider::{PallasEngine, VestaEngine}, traits::Engine};
 use clap::{Arg, Command};
 use flate2::{write::ZlibEncoder, Compression};
 use nova_eddsa::circuit::SigIter;
 use nova_snark::{
-    traits::Group,
     CompressedSNARK, PublicParams, RecursiveSNARK,
-    traits::circuit::TrivialCircuit
+    traits::circuit::TrivialCircuit,
+    traits::snark::RelaxedR1CSSNARKTrait
 };
 use std::time::{Instant, Duration};
 
+type E1 = PallasEngine;
+type E2 = VestaEngine;
+type EE1 = nova_snark::provider::ipa_pc::EvaluationEngine<E1>;
+type EE2 = nova_snark::provider::ipa_pc::EvaluationEngine<E2>;
+type S1 = nova_snark::spartan::snark::RelaxedR1CSSNARK<E1, EE1>;
+type S2 = nova_snark::spartan::snark::RelaxedR1CSSNARK<E2, EE2>;
+
 fn main() {
-    let cmd = Command::new("Ed25519 signature verification")
+    let cmd = Command::new("Ed25519 Signature Verification")
         .bin_name("verify")
         .arg(
             Arg::new("num_of_iters")
@@ -22,16 +28,16 @@ fn main() {
     let m = cmd.get_matches();
     let m = *m.get_one::<usize>("num_of_iters").unwrap();
 
-    type C1 = SigIter<<G1 as Group>::Scalar>;
-    type C2 = TrivialCircuit<<G2 as Group>::Scalar>;
+    type C1 = SigIter<<E1 as Engine>::Scalar>;
+    type C2 = TrivialCircuit<<E2 as Engine>::Scalar>;
     let circuit_primary = SigIter::get_step();
     let circuit_secondary = TrivialCircuit::default();
 
-    println!("Ed25519 signature verification");
+    println!("Ed25519 Signature Verification");
     println!("=========================================================");
     let param_gen_timer = Instant::now();
-    println!("Producing public parameters...");
-    let pp = PublicParams::<G1, G2, C1, C2>::setup(&circuit_primary, &circuit_secondary);
+    println!("Producing Public Parameters...");
+    let pp = PublicParams::<E1, E2, C1, C2>::setup(&circuit_primary, &circuit_secondary, &*S1::ck_floor(), &*S2::ck_floor());
 
     let param_gen_time = param_gen_timer.elapsed();
     println!("PublicParams::setup, took {:?} ", param_gen_time);
@@ -52,14 +58,14 @@ fn main() {
         "Number of variables per step (secondary circuit): {}",
         pp.num_variables().1
     );
-    let circuit_primary = circuit_primary;
-    let z0_primary = [<G1 as Group>::Scalar::zero()];
-    let z0_secondary = [<G2 as Group>::Scalar::zero()];
+    let circuit_primary = SigIter::get_step();
+    let z0_primary = [];
+    let z0_secondary = [<E2 as Engine>::Scalar::zero()];
 
     let proof_gen_timer = Instant::now();
     // produce a recursive SNARK
     println!("Generating a RecursiveSNARK...");
-    let mut recursive_snark: RecursiveSNARK<G1, G2, C1, C2> = RecursiveSNARK::<G1, G2, C1, C2>::new(
+    let mut recursive_snark: RecursiveSNARK<E1, E2, C1, C2> = RecursiveSNARK::<E1, E2, C1, C2>::new(
         &pp,
         &circuit_primary,
         &circuit_secondary,
@@ -101,7 +107,6 @@ fn main() {
         res.is_ok(),
         start.elapsed()
     );
-    println!("{:?}", res.clone().err());
     assert!(res.is_ok());
 
     // produce a compressed SNARK
@@ -109,10 +114,6 @@ fn main() {
     let (pk, vk) = CompressedSNARK::<_, _, _, _, S1, S2>::setup(&pp).unwrap();
 
     let start = Instant::now();
-    type EE1 = nova_snark::provider::ipa_pc::EvaluationEngine<G1>;
-    type EE2 = nova_snark::provider::ipa_pc::EvaluationEngine<G2>;
-    type S1 = nova_snark::spartan::snark::RelaxedR1CSSNARK<G1, EE1>;
-    type S2 = nova_snark::spartan::snark::RelaxedR1CSSNARK<G2, EE2>;
 
     let res = CompressedSNARK::<_, _, _, _, S1, S2>::prove(&pp, &pk, &recursive_snark);
     println!(
