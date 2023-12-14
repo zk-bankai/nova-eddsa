@@ -1,0 +1,171 @@
+Ed25519 Signature Verification
+=========================================================
+Producing Public Parameters...
+PublicParams::setup, took 4.913471775s 
+Number of constraints per step (primary circuit): 1446505
+Number of constraints per step (secondary circuit): 10357
+Number of variables per step (primary circuit): 1434903
+Number of variables per step (secondary circuit): 10337
+Generating a RecursiveSNARK...
+RecursiveSNARK::prove_step 0: true, took 558ns 
+RecursiveSNARK::prove_step 1: true, took 701.363568ms 
+RecursiveSNARK::prove_step 2: true, took 996.019588ms 
+RecursiveSNARK::prove_step 3: true, took 1.080949254s 
+RecursiveSNARK::prove_step 4: true, took 1.064538878s 
+RecursiveSNARK::prove_step 5: true, took 1.095190196s 
+RecursiveSNARK::prove_step 6: true, took 1.08947273s 
+RecursiveSNARK::prove_step 7: true, took 1.110743495s 
+RecursiveSNARK::prove_step 8: true, took 1.110846003s 
+RecursiveSNARK::prove_step 9: true, took 1.125145507s 
+RecursiveSNARK::prove_step 10: true, took 1.132959164s 
+RecursiveSNARK::prove_step 11: true, took 1.134417591s 
+RecursiveSNARK::prove_step 12: true, took 1.137163483s 
+RecursiveSNARK::prove_step 13: true, took 1.138404256s 
+RecursiveSNARK::prove_step 14: true, took 1.125100709s 
+RecursiveSNARK::prove_step 15: true, took 1.157875922s 
+RecursiveSNARK::prove_step 16: true, took 1.18025119s 
+RecursiveSNARK::prove_step 17: true, took 1.128215929s 
+RecursiveSNARK::prove_step 18: true, took 1.160364626s 
+RecursiveSNARK::prove_step 19: true, took 1.15025904s 
+RecursiveSNARK::prove_step 20: true, took 1.178127935s 
+RecursiveSNARK::prove_step 21: true, took 1.152562352s 
+RecursiveSNARK::prove_step 22: true, took 1.151728488s 
+RecursiveSNARK::prove_step 23: true, took 1.135968273s 
+RecursiveSNARK::prove_step 24: true, took 1.171625496s 
+RecursiveSNARK::prove_step 25: true, took 1.177913665s 
+RecursiveSNARK::prove_step 26: true, took 1.165037098s 
+RecursiveSNARK::prove_step 27: true, took 1.158246294s 
+RecursiveSNARK::prove_step 28: true, took 1.165335725s 
+RecursiveSNARK::prove_step 29: true, took 1.212257489s 
+RecursiveSNARK::prove_step 30: true, took 1.211376177s 
+RecursiveSNARK::prove_step 31: true, took 1.204647807s 
+RecursiveSNARK::prove_step 32: true, took 1.172399847s 
+RecursiveSNARK::prove_step 33: true, took 1.215252875s 
+RecursiveSNARK::prove_step 34: true, took 1.174014375s 
+RecursiveSNARK::prove_step 35: true, took 1.155539532s 
+RecursiveSNARK::prove_step 36: true, took 1.144640007s 
+RecursiveSNARK::prove_step 37: true, took 1.191099304s 
+RecursiveSNARK::prove_step 38: true, took 1.155063183s 
+RecursiveSNARK::prove_step 39: true, took 1.161528503s 
+RecursiveSNARK::prove_step 40: true, took 1.222889988s 
+RecursiveSNARK::prove_step 41: true, took 1.141035318s 
+RecursiveSNARK::prove_step 42: true, took 1.15410789s 
+RecursiveSNARK::prove_step 43: true, took 1.135156057s 
+RecursiveSNARK::prove_step 44: true, took 1.160232249s 
+RecursiveSNARK::prove_step 45: true, took 1.206402106s 
+RecursiveSNARK::prove_step 46: true, took 1.164537036s 
+RecursiveSNARK::prove_step 47: true, took 1.214504934s 
+RecursiveSNARK::prove_step 48: true, took 1.162271662s 
+RecursiveSNARK::prove_step 49: true, took 1.142018831s 
+RecursiveSNARK::prove_step 50: true, took 1.156131874s 
+RecursiveSNARK::prove_step 51: true, took 1.18827602s 
+RecursiveSNARK::prove_step 52: true, took 1.147824338s 
+RecursiveSNARK::prove_step 53: true, took 1.162356433s 
+RecursiveSNARK::prove_step 54: true, took 1.144345263s 
+RecursiveSNARK::prove_step 55: true, took 1.142452501s 
+RecursiveSNARK::prove_step 56: true, took 1.145275835s 
+RecursiveSNARK::prove_step 57: true, took 1.151895897s 
+RecursiveSNARK::prove_step 58: true, took 1.163910418s 
+RecursiveSNARK::prove_step 59: true, took 1.162440167s 
+RecursiveSNARK::prove_step 60: true, took 1.157353004s 
+RecursiveSNARK::prove_step 61: true, took 1.189612085s 
+RecursiveSNARK::prove_step 62: true, took 1.153843936s 
+RecursiveSNARK::prove_step 63: true, took 1.218618372s 
+RecursiveSNARK::prove_step 64: true, took 1.161016243s 
+RecursiveSNARK::prove_step 65: true, took 1.189190599s 
+RecursiveSNARK::prove_step 66: true, took 1.148135884s 
+RecursiveSNARK::prove_step 67: true, took 1.157929979s 
+RecursiveSNARK::prove_step 68: true, took 1.239658075s 
+RecursiveSNARK::prove_step 69: true, took 1.14246364s 
+RecursiveSNARK::prove_step 70: true, took 1.168634306s 
+RecursiveSNARK::prove_step 71: true, took 1.171425137s 
+RecursiveSNARK::prove_step 72: true, took 1.151486779s 
+RecursiveSNARK::prove_step 73: true, took 1.175605806s 
+RecursiveSNARK::prove_step 74: true, took 1.215137064s 
+RecursiveSNARK::prove_step 75: true, took 1.152710872s 
+RecursiveSNARK::prove_step 76: true, took 1.143597183s 
+RecursiveSNARK::prove_step 77: true, took 1.158944355s 
+RecursiveSNARK::prove_step 78: true, took 1.153631738s 
+RecursiveSNARK::prove_step 79: true, took 1.157402245s 
+RecursiveSNARK::prove_step 80: true, took 1.145486854s 
+RecursiveSNARK::prove_step 81: true, took 1.152760956s 
+RecursiveSNARK::prove_step 82: true, took 1.166875307s 
+RecursiveSNARK::prove_step 83: true, took 1.15755074s 
+RecursiveSNARK::prove_step 84: true, took 1.177310959s 
+RecursiveSNARK::prove_step 85: true, took 1.148149097s 
+RecursiveSNARK::prove_step 86: true, took 1.163542552s 
+RecursiveSNARK::prove_step 87: true, took 1.153024531s 
+RecursiveSNARK::prove_step 88: true, took 1.145966356s 
+RecursiveSNARK::prove_step 89: true, took 1.218226263s 
+RecursiveSNARK::prove_step 90: true, took 1.135474383s 
+RecursiveSNARK::prove_step 91: true, took 1.141333897s 
+RecursiveSNARK::prove_step 92: true, took 1.203110655s 
+RecursiveSNARK::prove_step 93: true, took 1.159790328s 
+RecursiveSNARK::prove_step 94: true, took 1.146767659s 
+RecursiveSNARK::prove_step 95: true, took 1.211817531s 
+RecursiveSNARK::prove_step 96: true, took 1.176152334s 
+RecursiveSNARK::prove_step 97: true, took 1.140273869s 
+RecursiveSNARK::prove_step 98: true, took 1.127373703s 
+RecursiveSNARK::prove_step 99: true, took 1.163972518s 
+RecursiveSNARK::prove_step 100: true, took 1.221501325s 
+RecursiveSNARK::prove_step 101: true, took 1.235047904s 
+RecursiveSNARK::prove_step 102: true, took 1.210608737s 
+RecursiveSNARK::prove_step 103: true, took 1.206983619s 
+RecursiveSNARK::prove_step 104: true, took 1.157724343s 
+RecursiveSNARK::prove_step 105: true, took 1.155796577s 
+RecursiveSNARK::prove_step 106: true, took 1.215642598s 
+RecursiveSNARK::prove_step 107: true, took 1.168229012s 
+RecursiveSNARK::prove_step 108: true, took 1.227631555s 
+RecursiveSNARK::prove_step 109: true, took 1.127104104s 
+RecursiveSNARK::prove_step 110: true, took 1.194132473s 
+RecursiveSNARK::prove_step 111: true, took 1.214691022s 
+RecursiveSNARK::prove_step 112: true, took 1.182145851s 
+RecursiveSNARK::prove_step 113: true, took 1.176897839s 
+RecursiveSNARK::prove_step 114: true, took 1.169116735s 
+RecursiveSNARK::prove_step 115: true, took 1.203202488s 
+RecursiveSNARK::prove_step 116: true, took 1.196185097s 
+RecursiveSNARK::prove_step 117: true, took 1.160132901s 
+RecursiveSNARK::prove_step 118: true, took 1.168658195s 
+RecursiveSNARK::prove_step 119: true, took 1.172586399s 
+RecursiveSNARK::prove_step 120: true, took 1.215122148s 
+RecursiveSNARK::prove_step 121: true, took 1.165394527s 
+RecursiveSNARK::prove_step 122: true, took 1.143497163s 
+RecursiveSNARK::prove_step 123: true, took 1.175508265s 
+RecursiveSNARK::prove_step 124: true, took 1.167798367s 
+RecursiveSNARK::prove_step 125: true, took 1.149643833s 
+RecursiveSNARK::prove_step 126: true, took 1.166194975s 
+RecursiveSNARK::prove_step 127: true, took 1.151424199s 
+RecursiveSNARK::prove_step 128: true, took 1.161641466s 
+RecursiveSNARK::prove_step 129: true, took 1.136380138s 
+RecursiveSNARK::prove_step 130: true, took 1.162018216s 
+RecursiveSNARK::prove_step 131: true, took 1.158770942s 
+RecursiveSNARK::prove_step 132: true, took 1.190091483s 
+RecursiveSNARK::prove_step 133: true, took 1.154105702s 
+RecursiveSNARK::prove_step 134: true, took 1.145596559s 
+RecursiveSNARK::prove_step 135: true, took 1.145957995s 
+RecursiveSNARK::prove_step 136: true, took 1.173549212s 
+RecursiveSNARK::prove_step 137: true, took 1.153825041s 
+RecursiveSNARK::prove_step 138: true, took 1.144921343s 
+RecursiveSNARK::prove_step 139: true, took 1.155224642s 
+RecursiveSNARK::prove_step 140: true, took 1.224666448s 
+RecursiveSNARK::prove_step 141: true, took 1.182492508s 
+RecursiveSNARK::prove_step 142: true, took 1.170244987s 
+RecursiveSNARK::prove_step 143: true, took 1.155629195s 
+RecursiveSNARK::prove_step 144: true, took 1.220981508s 
+RecursiveSNARK::prove_step 145: true, took 1.145407924s 
+RecursiveSNARK::prove_step 146: true, took 1.13636125s 
+RecursiveSNARK::prove_step 147: true, took 1.177614893s 
+RecursiveSNARK::prove_step 148: true, took 1.141418125s 
+RecursiveSNARK::prove_step 149: true, took 1.131508155s 
+Verifying a RecursiveSNARK...
+RecursiveSNARK::verify: true, took 934.071331ms
+Generating a CompressedSNARK using Spartan with IPA-PC...
+CompressedSNARK::prove: true, took 20.207141371s
+Total proving time is 219.438056224s
+CompressedSNARK::len 11404 bytes
+Verifying a CompressedSNARK...
+CompressedSNARK::verify: true, took 918.597003ms
+=========================================================
+Public parameters generation time: 4.913471775s 
+Total proving time (excl pp generation): 219.438056224s
+Total verification time: 918.597003ms

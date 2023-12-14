@@ -1,14 +1,23 @@
 Ed25519 Signature Verification
 =========================================================
 Producing Public Parameters...
-PublicParams::setup, took 16.9270565s 
+PublicParams::setup, took 4.971856091s 
 Number of constraints per step (primary circuit): 1446505
 Number of constraints per step (secondary circuit): 10357
 Number of variables per step (primary circuit): 1434903
 Number of variables per step (secondary circuit): 10337
 Generating a RecursiveSNARK...
-RecursiveSNARK::prove_step 0: true, took 42ns 
-RecursiveSNARK::prove_step 1: true, took 1.432861292s 
+RecursiveSNARK::prove_step 0: true, took 519ns 
+RecursiveSNARK::prove_step 1: true, took 734.981334ms 
 Verifying a RecursiveSNARK...
-RecursiveSNARK::verify: true, took 1.033206709s
+RecursiveSNARK::verify: true, took 478.455721ms
 Generating a CompressedSNARK using Spartan with IPA-PC...
+CompressedSNARK::prove: true, took 19.463869932s
+Total proving time is 25.009498778s
+CompressedSNARK::len 11374 bytes
+Verifying a CompressedSNARK...
+CompressedSNARK::verify: true, took 919.560389ms
+=========================================================
+Public parameters generation time: 4.971856091s 
+Total proving time (excl pp generation): 25.009498778s
+Total verification time: 919.560389ms
