@@ -1,13 +1,15 @@
-use nova_snark::{provider::{PallasEngine, VestaEngine}, traits::Engine};
 use clap::{Arg, Command};
 use flate2::{write::ZlibEncoder, Compression};
 use nova_eddsa::circuit::SigIter;
 use nova_snark::{
-    CompressedSNARK, PublicParams, RecursiveSNARK,
-    traits::circuit::TrivialCircuit,
-    traits::snark::RelaxedR1CSSNARKTrait
+    provider::{PallasEngine, VestaEngine},
+    traits::Engine,
 };
-use std::time::{Instant, Duration};
+use nova_snark::{
+    traits::circuit::TrivialCircuit, traits::snark::RelaxedR1CSSNARKTrait, CompressedSNARK,
+    PublicParams, RecursiveSNARK,
+};
+use std::time::{Duration, Instant};
 
 type E1 = PallasEngine;
 type E2 = VestaEngine;
@@ -37,7 +39,12 @@ fn main() {
     println!("=========================================================");
     let param_gen_timer = Instant::now();
     println!("Producing Public Parameters...");
-    let pp = PublicParams::<E1, E2, C1, C2>::setup(&circuit_primary, &circuit_secondary, &*S1::ck_floor(), &*S2::ck_floor());
+    let pp = PublicParams::<E1, E2, C1, C2>::setup(
+        &circuit_primary,
+        &circuit_secondary,
+        &*S1::ck_floor(),
+        &*S2::ck_floor(),
+    );
 
     let param_gen_time = param_gen_timer.elapsed();
     println!("PublicParams::setup, took {:?} ", param_gen_time);
@@ -65,22 +72,20 @@ fn main() {
     let proof_gen_timer = Instant::now();
     // produce a recursive SNARK
     println!("Generating a RecursiveSNARK...");
-    let mut recursive_snark: RecursiveSNARK<E1, E2, C1, C2> = RecursiveSNARK::<E1, E2, C1, C2>::new(
-        &pp,
-        &circuit_primary,
-        &circuit_secondary,
-        &z0_primary,
-        &z0_secondary,
-    ).unwrap();
+    let mut recursive_snark: RecursiveSNARK<E1, E2, C1, C2> =
+        RecursiveSNARK::<E1, E2, C1, C2>::new(
+            &pp,
+            &circuit_primary,
+            &circuit_secondary,
+            &z0_primary,
+            &z0_secondary,
+        )
+        .unwrap();
     let mut recursive_snark_prove_time = Duration::ZERO;
     let mut circuit_primary = circuit_primary;
     for i in 0..m {
         let step_start = Instant::now();
-        let res = recursive_snark.prove_step(
-            &pp,
-            &circuit_primary,
-            &circuit_secondary,
-        );
+        let res = recursive_snark.prove_step(&pp, &circuit_primary, &circuit_secondary);
         assert!(res.is_ok());
         let end_step = step_start.elapsed();
         println!(
@@ -90,11 +95,10 @@ fn main() {
             end_step
         );
         recursive_snark_prove_time += end_step;
-        
-        if i < m-1 {
+
+        if i < m - 1 {
             circuit_primary = SigIter::get_step();
         }
-
     }
 
     // verify the recursive SNARK

@@ -1,16 +1,16 @@
+use crate::ed25519::{sign, verify};
 use bellpepper::gadgets::num::AllocatedNum;
+use bellpepper_core::boolean::AllocatedBit;
 use bellpepper_core::boolean::Boolean;
 use bellpepper_core::{ConstraintSystem, SynthesisError};
 use bellpepper_ed25519::curve::AffinePoint;
 use bellpepper_ed25519::{circuit::AllocatedAffinePoint, curve::Ed25519Curve};
 use ff::{PrimeField, PrimeFieldBits};
 use nova_snark::traits::circuit::StepCircuit;
-use std::marker::PhantomData;
 use num_bigint::BigUint;
-use crate::ed25519::{sign, verify};
 use rand::RngCore;
+use std::marker::PhantomData;
 use std::ops::Rem;
-use bellpepper_core::boolean::AllocatedBit;
 
 pub fn verify_circuit<F, CS>(
     cs: &mut CS,
@@ -22,7 +22,7 @@ pub fn verify_circuit<F, CS>(
 where
     F: PrimeField + PrimeFieldBits,
     CS: ConstraintSystem<F>,
-{   
+{
     let p1 = g_al.ed25519_scalar_multiplication(&mut cs.namespace(|| "P1 = s * G"), sign.1)?;
 
     let h_mult_pk = pubkey.ed25519_scalar_multiplication(&mut cs.namespace(|| "h * pubkey"), h)?;
@@ -169,9 +169,12 @@ mod test {
     fn test_step_circuit() {
         let step = SigIter::get_step();
         let mut cs = TestConstraintSystem::<Fp>::new();
-        let zero_al = AllocatedNum::alloc(&mut cs.namespace(|| "alloc null"), || Ok(Fp::ZERO)).unwrap();
-        
-        let _ = step.synthesize(&mut cs.namespace(|| "call synth"), &[zero_al]).unwrap();
+        let zero_al =
+            AllocatedNum::alloc(&mut cs.namespace(|| "alloc null"), || Ok(Fp::ZERO)).unwrap();
+
+        let _ = step
+            .synthesize(&mut cs.namespace(|| "call synth"), &[zero_al])
+            .unwrap();
 
         assert!(cs.is_satisfied());
         assert_eq!(cs.num_constraints(), 1436681);
