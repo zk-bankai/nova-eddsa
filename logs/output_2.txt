@@ -1,0 +1,14 @@
+Ed25519 Signature Verification
+=========================================================
+Producing Public Parameters...
+PublicParams::setup, took 16.9270565s 
+Number of constraints per step (primary circuit): 1446505
+Number of constraints per step (secondary circuit): 10357
+Number of variables per step (primary circuit): 1434903
+Number of variables per step (secondary circuit): 10337
+Generating a RecursiveSNARK...
+RecursiveSNARK::prove_step 0: true, took 42ns 
+RecursiveSNARK::prove_step 1: true, took 1.432861292s 
+Verifying a RecursiveSNARK...
+RecursiveSNARK::verify: true, took 1.033206709s
+Generating a CompressedSNARK using Spartan with IPA-PC...
