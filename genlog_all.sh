@@ -2,8 +2,8 @@
 iters=(2 10 50 100 150 200)
 for i in "${iters[@]}"
 do
-    echo "Generating output logs for $1 iterations"
-    command ./target/release/examples/verify $1 > ./logs/output_$1.txt
+    echo "Generating output logs for $i iterations"
+    command ./target/release/examples/verify $i > ./logs/output_$i.txt
     echo "Sleeping for 1 mins to give the CPU a break"
     sleep 60
 done
