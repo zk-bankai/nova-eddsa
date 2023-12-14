@@ -1,4 +1,4 @@
-use bellpepper_core::num::AllocatedNum;
+use bellpepper::gadgets::num::AllocatedNum;
 use bellpepper_core::boolean::Boolean;
 use bellpepper_core::{ConstraintSystem, SynthesisError};
 use bellpepper_ed25519::curve::AffinePoint;
@@ -7,9 +7,10 @@ use ff::{PrimeField, PrimeFieldBits};
 use nova_snark::traits::circuit::StepCircuit;
 use std::marker::PhantomData;
 use num_bigint::BigUint;
+use crate::ed25519::{sign, verify};
 use rand::RngCore;
 use std::ops::Rem;
-use crate::ed25519::{sign, verify};
+use bellpepper_core::boolean::AllocatedBit;
 
 pub fn verify_circuit<F, CS>(
     cs: &mut CS,
@@ -48,7 +49,7 @@ where
     _phantom: PhantomData<F>,
 }
 
-impl<F: PrimeField + PrimeFieldBits> SigIter<F> {
+impl<F: PrimeField<Repr = [u8; 32]> + PrimeFieldBits> SigIter<F> {
     pub fn get_step() -> Self {
         let q: BigUint = BigUint::parse_bytes(
             b"1000000000000000000000000000000014def9dea2f79cd65812631a5cf5d3ed",
@@ -64,7 +65,6 @@ impl<F: PrimeField + PrimeFieldBits> SigIter<F> {
         let mut priv_key_bytes: [u8; 32] = [0; 32];
         rand::thread_rng().fill_bytes(&mut priv_key_bytes);
         let priv_key = BigUint::from_bytes_le(priv_key_bytes.as_ref()).rem(q.clone());
-
         let pub_key = Ed25519Curve::scalar_multiplication(&g, &priv_key);
 
         let (r, s) = sign(&h, &priv_key);
@@ -93,13 +93,13 @@ impl<F: PrimeField + PrimeFieldBits> SigIter<F> {
 
 impl<F: PrimeField + PrimeFieldBits> StepCircuit<F> for SigIter<F> {
     fn arity(&self) -> usize {
-        1
+        0
     }
 
     fn synthesize<CS: ConstraintSystem<F>>(
         &self,
         cs: &mut CS,
-        z: &[AllocatedNum<F>],
+        _z: &[AllocatedNum<F>],
     ) -> Result<Vec<AllocatedNum<F>>, SynthesisError> {
         let g = Ed25519Curve::basepoint();
         let g_al =
@@ -110,32 +110,51 @@ impl<F: PrimeField + PrimeFieldBits> StepCircuit<F> for SigIter<F> {
             &self.pubkey,
         )?;
 
-        let h_al: Vec<Boolean> = self.h.clone().into_iter().map(Boolean::constant).collect();
-        assert_eq!(h_al.len(), 253);
+        let h_bits: Vec<AllocatedBit> = self
+            .h
+            .iter()
+            .enumerate()
+            .map(|(i, b)| {
+                AllocatedBit::alloc(
+                    &mut cs.namespace(|| format!("alloc bit {} of h", i)),
+                    Some(*b),
+                )
+                .unwrap()
+            })
+            .collect();
+        let h_vec: Vec<Boolean> = h_bits.into_iter().map(Boolean::from).collect();
+        assert_eq!(h_vec.len(), 253);
 
         let r_al = AllocatedAffinePoint::alloc_affine_point(
             &mut cs.namespace(|| "alloc r"),
             &self.sign.0,
         )?;
 
-        let s_al: Vec<Boolean> = self
+        let s_bits: Vec<AllocatedBit> = self
             .sign
             .1
-            .clone()
-            .into_iter()
-            .map(Boolean::constant)
+            .iter()
+            .enumerate()
+            .map(|(i, b)| {
+                AllocatedBit::alloc(
+                    &mut cs.namespace(|| format!("alloc bit {} of s", i)),
+                    Some(*b),
+                )
+                .unwrap()
+            })
             .collect();
-        assert_eq!(s_al.len(), 253);
+        let s_vec: Vec<Boolean> = s_bits.into_iter().map(Boolean::from).collect();
+        assert_eq!(s_vec.len(), 253);
 
         verify_circuit(
             &mut cs.namespace(|| "verify signature"),
             g_al,
             pubkey_al,
-            h_al,
-            (r_al, s_al),
+            h_vec,
+            (r_al, s_vec),
         )?;
 
-        Ok(z.to_vec())
+        Ok(vec![])
     }
 }
 
@@ -155,7 +174,7 @@ mod test {
         let _ = step.synthesize(&mut cs.namespace(|| "call synth"), &[zero_al]).unwrap();
 
         assert!(cs.is_satisfied());
-        assert_eq!(cs.num_constraints(), 1436175);
+        assert_eq!(cs.num_constraints(), 1436681);
         assert_eq!(cs.num_inputs(), 1);
     }
 }
