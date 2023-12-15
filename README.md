@@ -2,7 +2,7 @@
 
 _High Throughput Ed25519 Signature Verification using Nova_ 
 
-This repository contains Ed25519 signature verification circuit which is represented as a step function in Nova computation. At each step, the step function takes hash of the message (hashing of message is performed outside circuit), public key and the signature as input followed by verifying the signature in circuit. The verification circuit is dependent on non-native field arithmetic which is implemented at [bellpepper-ed25519](https://github.com/lurk-lab/bellpepper-gadgets/tree/main/crates/ed25519).  
+This repository contains Ed25519 signature verification circuit which is represented as a step function in Nova computation. At each step, the step function takes hash of the message, public key and the signature as input followed by verifying the signature in circuit. The verification circuit is dependent on non-native field arithmetic which is implemented at [bellpepper-ed25519](https://github.com/lurk-lab/bellpepper-gadgets/tree/main/crates/ed25519).  
 
 ## Build
 
@@ -58,34 +58,37 @@ The existing files in the logs directory were generated on a **2.30GHz Intel Xeo
 ### Proving times
 ```bash
 $ grep "Total proving time is" $(ls -rt logs/output_*)
-logs/output_2.txt:Total proving time is 25.009498778s
-logs/output_10.txt:Total proving time is 36.68473051s
-logs/output_50.txt:Total proving time is 88.890880332s
-logs/output_100.txt:Total proving time is 154.27035379s
-logs/output_150.txt:Total proving time is 219.438056224s
-logs/output_200.txt:Total proving time is 285.01917248s
+logs/output_2.txt:Total proving time is 26.084653688s
+logs/output_10.txt:Total proving time is 36.495504574s
+logs/output_32.txt:Total proving time is 64.720713542s
+logs/output_50.txt:Total proving time is 88.819232145s
+logs/output_100.txt:Total proving time is 154.870464943s
+logs/output_150.txt:Total proving time is 218.779994537s
+logs/output_200.txt:Total proving time is 284.162978356s
 ```
 
 ### Verification times
 ```bash
 $ grep "CompressedSNARK::verify" $(ls -rt logs/output_*)
-logs/output_2.txt:CompressedSNARK::verify: true, took 919.560389ms
-logs/output_10.txt:CompressedSNARK::verify: true, took 934.998325ms
-logs/output_50.txt:CompressedSNARK::verify: true, took 927.13164ms
-logs/output_100.txt:CompressedSNARK::verify: true, took 932.824696ms
-logs/output_150.txt:CompressedSNARK::verify: true, took 918.597003ms
-logs/output_200.txt:CompressedSNARK::verify: true, took 928.71417ms
+logs/output_2.txt:CompressedSNARK::verify: true, took 931.929104ms
+logs/output_10.txt:CompressedSNARK::verify: true, took 926.144623ms
+logs/output_32.txt:CompressedSNARK::verify: true, took 926.004416ms
+logs/output_50.txt:CompressedSNARK::verify: true, took 928.002862ms
+logs/output_100.txt:CompressedSNARK::verify: true, took 927.487829ms
+logs/output_150.txt:CompressedSNARK::verify: true, took 922.853824ms
+logs/output_200.txt:CompressedSNARK::verify: true, took 923.464456ms
 ```
 
 ### Proof sizes
 ```bash
 $ grep "len" $(ls -rt logs/output_*)
-logs/output_2.txt:CompressedSNARK::len 11374 bytes
-logs/output_10.txt:CompressedSNARK::len 11409 bytes
-logs/output_50.txt:CompressedSNARK::len 11405 bytes
-logs/output_100.txt:CompressedSNARK::len 11413 bytes
-logs/output_150.txt:CompressedSNARK::len 11404 bytes
-logs/output_200.txt:CompressedSNARK::len 11410 bytes
+logs/output_2.txt:CompressedSNARK::len 11375 bytes
+logs/output_10.txt:CompressedSNARK::len 11406 bytes
+logs/output_32.txt:CompressedSNARK::len 11408 bytes
+logs/output_50.txt:CompressedSNARK::len 11402 bytes
+logs/output_100.txt:CompressedSNARK::len 11407 bytes
+logs/output_150.txt:CompressedSNARK::len 11407 bytes
+logs/output_200.txt:CompressedSNARK::len 11408 bytes
 ```
 
 ## License
