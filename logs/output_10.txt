@@ -1,31 +1,31 @@
 Ed25519 Signature Verification
 =========================================================
 Producing Public Parameters...
-PublicParams::setup, took 5.001961459s 
+PublicParams::setup, took 4.908663738s 
 Number of constraints per step (primary circuit): 1446505
 Number of constraints per step (secondary circuit): 10357
 Number of variables per step (primary circuit): 1434903
 Number of variables per step (secondary circuit): 10337
 Generating a RecursiveSNARK...
-RecursiveSNARK::prove_step 0: true, took 895ns 
-RecursiveSNARK::prove_step 1: true, took 698.719846ms 
-RecursiveSNARK::prove_step 2: true, took 843.37769ms 
-RecursiveSNARK::prove_step 3: true, took 1.096298927s 
-RecursiveSNARK::prove_step 4: true, took 1.076088813s 
-RecursiveSNARK::prove_step 5: true, took 1.154854712s 
-RecursiveSNARK::prove_step 6: true, took 1.177124061s 
-RecursiveSNARK::prove_step 7: true, took 1.122891841s 
-RecursiveSNARK::prove_step 8: true, took 1.118321385s 
-RecursiveSNARK::prove_step 9: true, took 1.1172303s 
+RecursiveSNARK::prove_step 0: true, took 547ns 
+RecursiveSNARK::prove_step 1: true, took 739.251689ms 
+RecursiveSNARK::prove_step 2: true, took 966.780379ms 
+RecursiveSNARK::prove_step 3: true, took 1.109311813s 
+RecursiveSNARK::prove_step 4: true, took 1.058654024s 
+RecursiveSNARK::prove_step 5: true, took 1.11499059s 
+RecursiveSNARK::prove_step 6: true, took 1.094367306s 
+RecursiveSNARK::prove_step 7: true, took 1.095997246s 
+RecursiveSNARK::prove_step 8: true, took 1.123255234s 
+RecursiveSNARK::prove_step 9: true, took 1.103828427s 
 Verifying a RecursiveSNARK...
-RecursiveSNARK::verify: true, took 820.972474ms
+RecursiveSNARK::verify: true, took 817.880403ms
 Generating a CompressedSNARK using Spartan with IPA-PC...
-CompressedSNARK::prove: true, took 20.149893092s
-Total proving time is 36.68473051s
-CompressedSNARK::len 11409 bytes
+CompressedSNARK::prove: true, took 19.965579331s
+Total proving time is 36.495504574s
+CompressedSNARK::len 11406 bytes
 Verifying a CompressedSNARK...
-CompressedSNARK::verify: true, took 934.998325ms
+CompressedSNARK::verify: true, took 926.144623ms
 =========================================================
-Public parameters generation time: 5.001961459s 
-Total proving time (excl pp generation): 36.68473051s
-Total verification time: 934.998325ms
+Public parameters generation time: 4.908663738s 
+Total proving time (excl pp generation): 36.495504574s
+Total verification time: 926.144623ms
