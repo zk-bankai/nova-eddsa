@@ -23,9 +23,9 @@ where
     F: PrimeField + PrimeFieldBits,
     CS: ConstraintSystem<F>,
 {
-    let p1 = g_al.ed25519_scalar_multiplication(&mut cs.namespace(|| "P1 = s * G"), sign.1)?;
+    let p1 = g_al.ed25519_scalar_multiplication(&mut cs.namespace(|| "P1 = s * G"), &sign.1)?;
 
-    let h_mult_pk = pubkey.ed25519_scalar_multiplication(&mut cs.namespace(|| "h * pubkey"), h)?;
+    let h_mult_pk = pubkey.ed25519_scalar_multiplication(&mut cs.namespace(|| "h * pubkey"), &h)?;
 
     let p2 = AllocatedAffinePoint::ed25519_point_addition(
         &mut cs.namespace(|| "R + h * pubkey"),
