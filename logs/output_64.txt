@@ -1,0 +1,85 @@
+Ed25519 Signature Verification
+=========================================================
+Producing Public Parameters...
+PublicParams::setup, took 5.104459079s 
+Number of constraints per step (primary circuit): 1513883
+Number of constraints per step (secondary circuit): 10349
+Number of variables per step (primary circuit): 1502198
+Number of variables per step (secondary circuit): 10329
+Generating a RecursiveSNARK...
+RecursiveSNARK::prove_step 0: true, took 520ns 
+RecursiveSNARK::prove_step 1: true, took 775.62863ms 
+RecursiveSNARK::prove_step 2: true, took 1.052644717s 
+RecursiveSNARK::prove_step 3: true, took 1.091304169s 
+RecursiveSNARK::prove_step 4: true, took 1.155329449s 
+RecursiveSNARK::prove_step 5: true, took 1.125421397s 
+RecursiveSNARK::prove_step 6: true, took 1.12309264s 
+RecursiveSNARK::prove_step 7: true, took 1.117582939s 
+RecursiveSNARK::prove_step 8: true, took 1.118518965s 
+RecursiveSNARK::prove_step 9: true, took 1.134190737s 
+RecursiveSNARK::prove_step 10: true, took 1.129675081s 
+RecursiveSNARK::prove_step 11: true, took 1.147205739s 
+RecursiveSNARK::prove_step 12: true, took 1.160861215s 
+RecursiveSNARK::prove_step 13: true, took 1.162754921s 
+RecursiveSNARK::prove_step 14: true, took 1.15057814s 
+RecursiveSNARK::prove_step 15: true, took 1.19329224s 
+RecursiveSNARK::prove_step 16: true, took 1.223758137s 
+RecursiveSNARK::prove_step 17: true, took 1.17191743s 
+RecursiveSNARK::prove_step 18: true, took 1.178244371s 
+RecursiveSNARK::prove_step 19: true, took 1.178454753s 
+RecursiveSNARK::prove_step 20: true, took 1.176260807s 
+RecursiveSNARK::prove_step 21: true, took 1.240935386s 
+RecursiveSNARK::prove_step 22: true, took 1.197859874s 
+RecursiveSNARK::prove_step 23: true, took 1.194874821s 
+RecursiveSNARK::prove_step 24: true, took 1.191771871s 
+RecursiveSNARK::prove_step 25: true, took 1.17088385s 
+RecursiveSNARK::prove_step 26: true, took 1.181741391s 
+RecursiveSNARK::prove_step 27: true, took 1.178085078s 
+RecursiveSNARK::prove_step 28: true, took 1.187776252s 
+RecursiveSNARK::prove_step 29: true, took 1.161837138s 
+RecursiveSNARK::prove_step 30: true, took 1.186333886s 
+RecursiveSNARK::prove_step 31: true, took 1.179702347s 
+RecursiveSNARK::prove_step 32: true, took 1.199244825s 
+RecursiveSNARK::prove_step 33: true, took 1.224651687s 
+RecursiveSNARK::prove_step 34: true, took 1.179340938s 
+RecursiveSNARK::prove_step 35: true, took 1.24207185s 
+RecursiveSNARK::prove_step 36: true, took 1.190439084s 
+RecursiveSNARK::prove_step 37: true, took 1.18907294s 
+RecursiveSNARK::prove_step 38: true, took 1.19769836s 
+RecursiveSNARK::prove_step 39: true, took 1.17435214s 
+RecursiveSNARK::prove_step 40: true, took 1.225295265s 
+RecursiveSNARK::prove_step 41: true, took 1.17270068s 
+RecursiveSNARK::prove_step 42: true, took 1.231375161s 
+RecursiveSNARK::prove_step 43: true, took 1.175410492s 
+RecursiveSNARK::prove_step 44: true, took 1.188780767s 
+RecursiveSNARK::prove_step 45: true, took 1.182099476s 
+RecursiveSNARK::prove_step 46: true, took 1.194413288s 
+RecursiveSNARK::prove_step 47: true, took 1.169507723s 
+RecursiveSNARK::prove_step 48: true, took 1.175513516s 
+RecursiveSNARK::prove_step 49: true, took 1.243326983s 
+RecursiveSNARK::prove_step 50: true, took 1.206965704s 
+RecursiveSNARK::prove_step 51: true, took 1.170418642s 
+RecursiveSNARK::prove_step 52: true, took 1.168607565s 
+RecursiveSNARK::prove_step 53: true, took 1.187473687s 
+RecursiveSNARK::prove_step 54: true, took 1.192620969s 
+RecursiveSNARK::prove_step 55: true, took 1.183981548s 
+RecursiveSNARK::prove_step 56: true, took 1.174295175s 
+RecursiveSNARK::prove_step 57: true, took 1.168071076s 
+RecursiveSNARK::prove_step 58: true, took 1.182836749s 
+RecursiveSNARK::prove_step 59: true, took 1.200937745s 
+RecursiveSNARK::prove_step 60: true, took 1.22121948s 
+RecursiveSNARK::prove_step 61: true, took 1.188007199s 
+RecursiveSNARK::prove_step 62: true, took 1.203223079s 
+RecursiveSNARK::prove_step 63: true, took 1.185946464s 
+Verifying a RecursiveSNARK...
+RecursiveSNARK::verify: true, took 997.935184ms
+Generating a CompressedSNARK using Spartan with IPA-PC...
+CompressedSNARK::prove: true, took 19.544722701s
+Total proving time is 111.198203602s
+CompressedSNARK::len 11404 bytes
+Verifying a CompressedSNARK...
+CompressedSNARK::verify: true, took 916.408182ms
+=========================================================
+Public parameters generation time: 5.104459079s 
+Total proving time (excl pp generation): 111.198203602s
+Total verification time: 916.408182ms

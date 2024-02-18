@@ -52,43 +52,37 @@ The benchmarks will be generated in the [`logs`](/logs/) directory. It contains 
 The existing files in the logs directory were generated on a **2.30GHz Intel Xeon Gold 6314U CPU with 64 cores and 125GB RAM**.
 - For all iterations
   - Verification time was under 1 sec.
-  - Proof size was about 11.5KB.
-- The proving time for 200 signatures was under 5 mins. Proving times for other lengths are shown below.
+  - Proof size was about 11.4KB.
+- The proving time for 32 signatures was under 69 sec. Proving times for other lengths are shown below.
 
 ### Proving times
 ```bash
 $ grep "Total proving time is" $(ls -rt logs/output_*)
-logs/output_2.txt:Total proving time is 26.084653688s
-logs/output_10.txt:Total proving time is 36.495504574s
-logs/output_32.txt:Total proving time is 64.720713542s
-logs/output_50.txt:Total proving time is 88.819232145s
-logs/output_100.txt:Total proving time is 154.870464943s
-logs/output_150.txt:Total proving time is 218.779994537s
-logs/output_200.txt:Total proving time is 284.162978356s
+logs/output_8.txt:Total proving time is 36.821469524s
+logs/output_16.txt:Total proving time is 47.60963894s
+logs/output_32.txt:Total proving time is 68.826601078s
+logs/output_64.txt:Total proving time is 111.198203602s
+logs/output_128.txt:Total proving time is 196.445131859s
 ```
 
 ### Verification times
 ```bash
 $ grep "CompressedSNARK::verify" $(ls -rt logs/output_*)
-logs/output_2.txt:CompressedSNARK::verify: true, took 931.929104ms
-logs/output_10.txt:CompressedSNARK::verify: true, took 926.144623ms
-logs/output_32.txt:CompressedSNARK::verify: true, took 926.004416ms
-logs/output_50.txt:CompressedSNARK::verify: true, took 928.002862ms
-logs/output_100.txt:CompressedSNARK::verify: true, took 927.487829ms
-logs/output_150.txt:CompressedSNARK::verify: true, took 922.853824ms
-logs/output_200.txt:CompressedSNARK::verify: true, took 923.464456ms
+logs/output_8.txt:CompressedSNARK::verify: true, took 943.797593ms
+logs/output_16.txt:CompressedSNARK::verify: true, took 935.054545ms
+logs/output_32.txt:CompressedSNARK::verify: true, took 916.476058ms
+logs/output_64.txt:CompressedSNARK::verify: true, took 916.408182ms
+logs/output_128.txt:CompressedSNARK::verify: true, took 937.352972ms
 ```
 
 ### Proof sizes
 ```bash
 $ grep "len" $(ls -rt logs/output_*)
-logs/output_2.txt:CompressedSNARK::len 11375 bytes
-logs/output_10.txt:CompressedSNARK::len 11406 bytes
-logs/output_32.txt:CompressedSNARK::len 11408 bytes
-logs/output_50.txt:CompressedSNARK::len 11402 bytes
-logs/output_100.txt:CompressedSNARK::len 11407 bytes
-logs/output_150.txt:CompressedSNARK::len 11407 bytes
-logs/output_200.txt:CompressedSNARK::len 11408 bytes
+logs/output_8.txt:CompressedSNARK::len 11405 bytes
+logs/output_16.txt:CompressedSNARK::len 11412 bytes
+logs/output_32.txt:CompressedSNARK::len 11402 bytes
+logs/output_64.txt:CompressedSNARK::len 11404 bytes
+logs/output_128.txt:CompressedSNARK::len 11407 bytes
 ```
 
 ## License

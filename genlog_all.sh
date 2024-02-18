@@ -1,5 +1,5 @@
 #!/bin/bash
-iters=(2 10 32 50 100 150 200)
+iters=(8 16 32 64 128)
 for i in "${iters[@]}"
 do
     echo "Generating output logs for $i iterations"
