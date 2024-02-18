@@ -1,35 +1,129 @@
-use crate::ed25519::{sign, verify};
+#![allow(non_snake_case)]
+
+use crate::ed25519::{compress, sign, verify};
+use bellpepper::gadgets::multipack::bytes_to_bits;
 use bellpepper::gadgets::num::AllocatedNum;
-use bellpepper_core::boolean::AllocatedBit;
-use bellpepper_core::boolean::Boolean;
+use bellpepper_core::boolean::{AllocatedBit, Boolean};
 use bellpepper_core::{ConstraintSystem, SynthesisError};
 use bellpepper_ed25519::curve::AffinePoint;
 use bellpepper_ed25519::{circuit::AllocatedAffinePoint, curve::Ed25519Curve};
+use bellpepper_nonnative::mp::bignat::BigNat;
+use bellpepper_nonnative::util::bit::{Bit, Bitvector};
+use bellpepper_sha512::sha512::sha512;
 use ff::{PrimeField, PrimeFieldBits};
 use nova_snark::traits::circuit::StepCircuit;
-use num_bigint::BigUint;
+use num_bigint::{BigInt, BigUint};
 use rand::RngCore;
 use std::marker::PhantomData;
-use std::ops::Rem;
 
 pub fn verify_circuit<F, CS>(
     cs: &mut CS,
-    g_al: AllocatedAffinePoint<F>,
-    pubkey: AllocatedAffinePoint<F>,
-    h: Vec<Boolean>,
-    sign: (AllocatedAffinePoint<F>, Vec<Boolean>),
+    G: AffinePoint,
+    P: AffinePoint,
+    msg: [u8; 32],
+    sign: (AffinePoint, BigUint),
 ) -> Result<(), SynthesisError>
 where
     F: PrimeField + PrimeFieldBits,
     CS: ConstraintSystem<F>,
 {
-    let p1 = g_al.ed25519_scalar_multiplication(&mut cs.namespace(|| "P1 = s * G"), &sign.1)?;
+    let q = Ed25519Curve::order();
 
-    let h_mult_pk = pubkey.ed25519_scalar_multiplication(&mut cs.namespace(|| "h * pubkey"), &h)?;
+    let G_al =
+        AllocatedAffinePoint::alloc_affine_point(&mut cs.namespace(|| "alloc base point"), &G)?;
+
+    let P_al = AllocatedAffinePoint::alloc_affine_point(&mut cs.namespace(|| "alloc pubkey"), &P)?;
+
+    let R_al = AllocatedAffinePoint::alloc_affine_point(&mut cs.namespace(|| "alloc r"), &sign.0)?;
+
+    // Compute hash_out = SHA512(R || P || msg)
+    let mut input = Vec::new();
+    input.extend(compress(sign.0.clone()));
+    input.extend(compress(P));
+    input.extend(msg);
+    assert_eq!(input.len(), 96);
+    let input_bool: Vec<Boolean> = bytes_to_bits(&input)
+        .iter()
+        .enumerate()
+        .map(|(i, b)| {
+            Boolean::from(
+                AllocatedBit::alloc(
+                    &mut cs.namespace(|| format!("alloc bit {} of hash input", i)),
+                    Some(*b),
+                )
+                .unwrap(),
+            )
+        })
+        .collect();
+    let hash_out = sha512(&mut cs.namespace(|| "compute hash of input"), &input_bool).unwrap();
+
+    // compute h = hash_out (mod q)
+    let bs: Vec<Bit<F>> = hash_out
+        .iter()
+        .rev()
+        .map(|b| Bit::<F>::from_sapling::<CS>(b.clone()))
+        .collect();
+    let bit_vector = Bitvector::from_bits(bs);
+    let hash_big = BigNat::recompose(&bit_vector, 64);
+    let q_big = BigNat::alloc_from_nat(
+        &mut cs.namespace(|| "alloc curve order"),
+        || Ok(BigInt::from(q.clone())),
+        64,
+        4,
+    )
+    .unwrap();
+    let h_big = hash_big
+        .red_mod(&mut cs.namespace(|| "mod q"), &q_big)
+        .unwrap();
+
+    // Allocate h as vector of Boolean
+    let mut h_bits = h_big
+        .decompose(&mut cs.namespace(|| "decompose to bits"))
+        .unwrap()
+        .into_bits();
+    h_bits.truncate(h_bits.len() - 3);
+    assert_eq!(h_bits.len(), 253);
+    let h_bool: Vec<Boolean> = h_bits
+        .iter()
+        .enumerate()
+        .map(|(i, b)| {
+            Boolean::from(
+                AllocatedBit::alloc(
+                    &mut cs.namespace(|| format!("alloc bit {} of h", i)),
+                    Some(b.value.unwrap_or(false)),
+                )
+                .unwrap(),
+            )
+        })
+        .collect();
+
+    // Allocate s as vector of Boolean
+    let mut s_vec = sign.1.to_radix_le(2);
+    s_vec.resize(253, 0u8);
+    let s_bits: Vec<bool> = s_vec.into_iter().map(|i| i != 0).collect();
+    assert_eq!(s_bits.len(), 253);
+    let s_bool: Vec<Boolean> = s_bits
+        .iter()
+        .enumerate()
+        .map(|(i, b)| {
+            Boolean::from(
+                AllocatedBit::alloc(
+                    &mut cs.namespace(|| format!("alloc bit {} of s", i)),
+                    Some(*b),
+                )
+                .unwrap(),
+            )
+        })
+        .collect();
+
+    let p1 = G_al.ed25519_scalar_multiplication(&mut cs.namespace(|| "P1 = s * G"), &s_bool)?;
+
+    let h_mult_pk =
+        P_al.ed25519_scalar_multiplication(&mut cs.namespace(|| "h * pubkey"), &h_bool)?;
 
     let p2 = AllocatedAffinePoint::ed25519_point_addition(
         &mut cs.namespace(|| "R + h * pubkey"),
-        &sign.0,
+        &R_al,
         &h_mult_pk,
     )?;
 
@@ -44,48 +138,25 @@ where
     F: PrimeField + PrimeFieldBits,
 {
     pubkey: AffinePoint,
-    h: Vec<bool>,
-    sign: (AffinePoint, Vec<bool>),
+    msg: [u8; 32],
+    sign: (AffinePoint, BigUint),
     _phantom: PhantomData<F>,
 }
 
 impl<F: PrimeField<Repr = [u8; 32]> + PrimeFieldBits> SigIter<F> {
     pub fn get_step() -> Self {
-        let q: BigUint = BigUint::parse_bytes(
-            b"1000000000000000000000000000000014def9dea2f79cd65812631a5cf5d3ed",
-            16,
-        )
-        .unwrap();
-        let g = Ed25519Curve::basepoint();
+        let mut msg: [u8; 32] = [0; 32];
+        rand::thread_rng().fill_bytes(&mut msg);
 
-        let mut h_bytes: [u8; 32] = [0; 32];
-        rand::thread_rng().fill_bytes(&mut h_bytes);
-        let h = BigUint::from_bytes_le(h_bytes.as_ref()).rem(q.clone());
+        let ((R, s), P) = sign(msg);
 
-        let mut priv_key_bytes: [u8; 32] = [0; 32];
-        rand::thread_rng().fill_bytes(&mut priv_key_bytes);
-        let priv_key = BigUint::from_bytes_le(priv_key_bytes.as_ref()).rem(q.clone());
-        let pub_key = Ed25519Curve::scalar_multiplication(&g, &priv_key);
-
-        let (r, s) = sign(&h, &priv_key);
-
-        let veri_sig = verify(&h, &pub_key, &r, &s);
+        let veri_sig = verify(msg, P.clone(), R.clone(), s.clone());
         assert!(veri_sig);
 
-        let mut h_vec = h.to_radix_le(2);
-        h_vec.resize(253, 0u8);
-        let h_bits: Vec<bool> = h_vec.into_iter().map(|i| i != 0).collect();
-        assert_eq!(h_bits.len(), 253);
-
-        let mut s_vec = s.to_radix_le(2);
-        s_vec.resize(253, 0u8);
-        let s_bits: Vec<bool> = s_vec.into_iter().map(|i| i != 0).collect();
-        assert_eq!(s_bits.len(), 253);
-
         Self {
-            pubkey: pub_key,
-            h: h_bits,
-            sign: (r, s_bits),
+            pubkey: P,
+            msg,
+            sign: (R, s),
             _phantom: PhantomData,
         }
     }
@@ -102,56 +173,13 @@ impl<F: PrimeField + PrimeFieldBits> StepCircuit<F> for SigIter<F> {
         _z: &[AllocatedNum<F>],
     ) -> Result<Vec<AllocatedNum<F>>, SynthesisError> {
         let g = Ed25519Curve::basepoint();
-        let g_al =
-            AllocatedAffinePoint::alloc_affine_point(&mut cs.namespace(|| "alloc base point"), &g)?;
-
-        let pubkey_al = AllocatedAffinePoint::alloc_affine_point(
-            &mut cs.namespace(|| "alloc pubkey"),
-            &self.pubkey,
-        )?;
-
-        let h_bits: Vec<AllocatedBit> = self
-            .h
-            .iter()
-            .enumerate()
-            .map(|(i, b)| {
-                AllocatedBit::alloc(
-                    &mut cs.namespace(|| format!("alloc bit {} of h", i)),
-                    Some(*b),
-                )
-                .unwrap()
-            })
-            .collect();
-        let h_vec: Vec<Boolean> = h_bits.into_iter().map(Boolean::from).collect();
-        assert_eq!(h_vec.len(), 253);
-
-        let r_al = AllocatedAffinePoint::alloc_affine_point(
-            &mut cs.namespace(|| "alloc r"),
-            &self.sign.0,
-        )?;
-
-        let s_bits: Vec<AllocatedBit> = self
-            .sign
-            .1
-            .iter()
-            .enumerate()
-            .map(|(i, b)| {
-                AllocatedBit::alloc(
-                    &mut cs.namespace(|| format!("alloc bit {} of s", i)),
-                    Some(*b),
-                )
-                .unwrap()
-            })
-            .collect();
-        let s_vec: Vec<Boolean> = s_bits.into_iter().map(Boolean::from).collect();
-        assert_eq!(s_vec.len(), 253);
 
         verify_circuit(
             &mut cs.namespace(|| "verify signature"),
-            g_al,
-            pubkey_al,
-            h_vec,
-            (r_al, s_vec),
+            g,
+            self.pubkey.clone(),
+            self.msg,
+            self.sign.clone(),
         )?;
 
         Ok(vec![])
@@ -177,7 +205,7 @@ mod test {
             .unwrap();
 
         assert!(cs.is_satisfied());
-        assert_eq!(cs.num_constraints(), 1436681);
+        assert_eq!(cs.num_constraints(), 1504067);
         assert_eq!(cs.num_inputs(), 1);
     }
 }
