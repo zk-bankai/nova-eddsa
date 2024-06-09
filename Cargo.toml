@@ -9,7 +9,8 @@ edition = "2021"
 bellpepper-core = { version = "0.4.0", default-features = false }
 bellpepper = { version = "0.4.0", default-features = false }
 ff = "0.13.0"
-bellpepper-ed25519 = { git = "https://github.com/lurk-lab/bellpepper-gadgets.git" }
+# bellpepper-ed25519 = { git = "https://github.com/lurk-lab/bellpepper-gadgets.git" }
+bellpepper-ed25519 = { git = "https://github.com/avras/bellpepper-gadgets.git", branch = "avoid-assignment-missing" }
 bellpepper-sha512 = { git = "https://github.com/lurk-lab/bellpepper-gadgets.git" }
 bellpepper-nonnative = { git = "https://github.com/avras/bellperson-nonnative.git" }
 num-bigint = "0.4.3"

@@ -205,7 +205,7 @@ mod test {
             .unwrap();
 
         assert!(cs.is_satisfied());
-        assert_eq!(cs.num_constraints(), 1504067);
+        assert_eq!(cs.num_constraints(), 1669649);
         assert_eq!(cs.num_inputs(), 1);
     }
 }
